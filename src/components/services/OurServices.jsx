@@ -52,7 +52,7 @@ const cardVariants = {
 
 const OurServices = () => {
   return (
-    <section className="py-16 bg-base-100">
+    <section className="py-16 mt-10 bg-base-200">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <motion.div

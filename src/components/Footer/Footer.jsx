@@ -6,7 +6,7 @@ import { Link, NavLink } from "react-router";
 const Footer = () => {
     
   return (
-    <footer className="footer footer-horizontal footer-center bg-neutral text-neutral-content p-10">
+    <footer className="footer footer-horizontal footer-center bg-neutral text-neutral-content w-11/12 mx-auto p-10">
       <aside>
        <ProfastLogo></ProfastLogo>
         <p className="font-semibold">

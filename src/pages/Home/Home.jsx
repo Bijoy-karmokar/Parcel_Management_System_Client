@@ -6,6 +6,7 @@ import BrandSlider from '../../components/BrandSlider/BrandSlider';
 import LiveTrackingSection from '../../components/LiveTrackingSection/LiveTrackingSection';
 import BeMerchant from '../../components/BeMerchant/BeMerchant';
 import FrequentlySection from '../../components/FrequentlySection/FrequentlySection';
+import TestimonialCarousel from '../../components/Customers/TestimonialCarousel';
 
 const Home = () => {
     return (
@@ -16,6 +17,7 @@ const Home = () => {
             <BrandSlider></BrandSlider>
             <LiveTrackingSection></LiveTrackingSection>
             <BeMerchant></BeMerchant>
+            <TestimonialCarousel></TestimonialCarousel>
             <FrequentlySection></FrequentlySection>
         </div>
     );

@@ -53,7 +53,7 @@ const cardVariants = {
 
 const HowItWorks = () => {
   return (
-    <section className="py-16 bg-base-200">
+    <section className="py-16 bg-base-200 mt-10 rounded-xl">
       <div className="max-w-7xl mx-auto px-4">
 
         {/* Header */}

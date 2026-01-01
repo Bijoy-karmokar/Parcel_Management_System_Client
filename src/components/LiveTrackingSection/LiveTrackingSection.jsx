@@ -29,7 +29,7 @@ const trackingCards = [
 
 const LiveTrackingSection = () => {
   return (
-    <section className="py-16 bg-base-200">
+    <section className="py-16 mt-10 rounded-xl bg-base-200">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">

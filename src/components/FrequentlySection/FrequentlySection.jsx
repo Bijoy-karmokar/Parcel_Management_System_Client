@@ -2,7 +2,7 @@ import React from "react";
 
 const FrequentlySection = () => {
   return (
-    <div className="w-9/12 mx-auto">
+    <div className="w-9/12 mx-auto mt-10 rounded-xl">
       <div className="text-center">
         <h3 className="text-4xl md:text-5xl font-extrabold">
           Frequently Asked Question (FAQ)

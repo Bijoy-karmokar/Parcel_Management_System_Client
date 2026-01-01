@@ -20,7 +20,7 @@ const logos = [
 
 const BrandSlider = () => {
   return (
-    <section className="py-14 bg-base-100 overflow-hidden">
+    <section className="py-14 mt-10 bg-base-200 rounded-xl overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
 
         {/* Section title */}
