@@ -3,28 +3,25 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { calculateCost } from "../../utils/CalculateCost";
 import { useLoaderData } from "react-router";
-import useAuth from './../../hooks/useAuth';
+import useAuth from "./../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 // Utility function to generate a simple transactionId
 const generateTransactionId = () => {
-  return 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+  return "TXN-" + Math.random().toString(36).substr(2, 9).toUpperCase();
 };
 
 const SendParcel = () => {
-  const warehouses = useLoaderData() || []; 
+  const warehouses = useLoaderData() || [];
   const { user } = useAuth();
-  
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-  } = useForm();
+  const axiosSecure = useAxiosSecure();
+
+  const { register, handleSubmit, watch, reset } = useForm();
 
   const parcelType = watch("type");
 
   // Unique regions
-  const regions = [...new Set(warehouses.map(w => w.region))];
+  const regions = [...new Set(warehouses.map((w) => w.region))];
 
   const [senderDistricts, setSenderDistricts] = useState([]);
   const [receiverDistricts, setReceiverDistricts] = useState([]);
@@ -32,15 +29,15 @@ const SendParcel = () => {
   // Handle region change
   const handleSenderRegion = (region) => {
     const districts = warehouses
-      .filter(w => w.region === region)
-      .map(w => w.district);
+      .filter((w) => w.region === region)
+      .map((w) => w.district);
     setSenderDistricts(districts);
   };
 
   const handleReceiverRegion = (region) => {
     const districts = warehouses
-      .filter(w => w.region === region)
-      .map(w => w.district);
+      .filter((w) => w.region === region)
+      .map((w) => w.district);
     setReceiverDistricts(districts);
   };
 
@@ -102,13 +99,16 @@ const SendParcel = () => {
         creation_date: new Date().toISOString(),
       };
 
-      await fetch("http://localhost:5000/parcels", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(finalData),
-      });
-
-      Swal.fire("Success!", "Parcel submitted successfully!", "success");
+      axiosSecure
+        .post("/parcels", finalData)
+        .then((res) => {
+          console.log(res.data);
+          Swal.fire("Success!", "Parcel submitted successfully!", "success");
+        })
+        .catch((err) => {
+          console.error(err);
+          Swal.fire("Error", "Parcel submission failed", "error");
+        });
       reset();
     }
   };
@@ -124,14 +124,26 @@ const SendParcel = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Parcel Info</h3>
             <div className="grid md:grid-cols-3 gap-4">
-              <select {...register("type", { required: true })} className="select select-bordered">
+              <select
+                {...register("type", { required: true })}
+                className="select select-bordered"
+              >
                 <option value="">Parcel Type</option>
                 <option value="document">Document</option>
                 <option value="non-document">Non Document</option>
               </select>
-              <input {...register("title", { required: true })} placeholder="Parcel Title" className="input input-bordered" />
+              <input
+                {...register("title", { required: true })}
+                placeholder="Parcel Title"
+                className="input input-bordered"
+              />
               {parcelType === "non-document" && (
-                <input type="number" {...register("weight")} placeholder="Weight (kg)" className="input input-bordered" />
+                <input
+                  type="number"
+                  {...register("weight")}
+                  placeholder="Weight (kg)"
+                  className="input input-bordered"
+                />
               )}
             </div>
           </div>
@@ -141,18 +153,45 @@ const SendParcel = () => {
             <div>
               <h3 className="text-xl font-semibold mb-4">Sender Info</h3>
               <div className="grid md:grid-cols-2 gap-4">
-                <input defaultValue="John Doe" {...register("senderName", { required: true })} className="input input-bordered" />
-                <input {...register("senderContact", { required: true })} placeholder="Contact" className="input input-bordered" />
-                <select {...register("senderRegion", { required: true })} onChange={(e) => handleSenderRegion(e.target.value)} className="select select-bordered">
+                <input
+                  defaultValue="John Doe"
+                  {...register("senderName", { required: true })}
+                  className="input input-bordered"
+                />
+                <input
+                  {...register("senderContact", { required: true })}
+                  placeholder="Contact"
+                  className="input input-bordered"
+                />
+                <select
+                  {...register("senderRegion", { required: true })}
+                  onChange={(e) => handleSenderRegion(e.target.value)}
+                  className="select select-bordered"
+                >
                   <option value="">Select Region</option>
-                  {regions.map(r => <option key={r}>{r}</option>)}
+                  {regions.map((r) => (
+                    <option key={r}>{r}</option>
+                  ))}
                 </select>
-                <select {...register("senderDistrict", { required: true })} className="select select-bordered">
+                <select
+                  {...register("senderDistrict", { required: true })}
+                  className="select select-bordered"
+                >
                   <option value="">Service Center</option>
-                  {senderDistricts.map(d => <option key={d}>{d}</option>)}
+                  {senderDistricts.map((d) => (
+                    <option key={d}>{d}</option>
+                  ))}
                 </select>
-                <input {...register("senderAddress", { required: true })} placeholder="Address" className="input input-bordered" />
-                <input {...register("pickupInstruction", { required: true })} placeholder="Pickup Instruction" className="input input-bordered" />
+                <input
+                  {...register("senderAddress", { required: true })}
+                  placeholder="Address"
+                  className="input input-bordered"
+                />
+                <input
+                  {...register("pickupInstruction", { required: true })}
+                  placeholder="Pickup Instruction"
+                  className="input input-bordered"
+                />
               </div>
             </div>
 
@@ -160,18 +199,45 @@ const SendParcel = () => {
             <div>
               <h3 className="text-xl font-semibold mb-4">Receiver Info</h3>
               <div className="grid md:grid-cols-2 gap-4">
-                <input {...register("receiverName", { required: true })} placeholder="Name" className="input input-bordered" />
-                <input {...register("receiverContact", { required: true })} placeholder="Contact" className="input input-bordered" />
-                <select {...register("receiverRegion", { required: true })} onChange={(e) => handleReceiverRegion(e.target.value)} className="select select-bordered">
+                <input
+                  {...register("receiverName", { required: true })}
+                  placeholder="Name"
+                  className="input input-bordered"
+                />
+                <input
+                  {...register("receiverContact", { required: true })}
+                  placeholder="Contact"
+                  className="input input-bordered"
+                />
+                <select
+                  {...register("receiverRegion", { required: true })}
+                  onChange={(e) => handleReceiverRegion(e.target.value)}
+                  className="select select-bordered"
+                >
                   <option value="">Select Region</option>
-                  {regions.map(r => <option key={r}>{r}</option>)}
+                  {regions.map((r) => (
+                    <option key={r}>{r}</option>
+                  ))}
                 </select>
-                <select {...register("receiverDistrict", { required: true })} className="select select-bordered">
+                <select
+                  {...register("receiverDistrict", { required: true })}
+                  className="select select-bordered"
+                >
                   <option value="">Service Center</option>
-                  {receiverDistricts.map(d => <option key={d}>{d}</option>)}
+                  {receiverDistricts.map((d) => (
+                    <option key={d}>{d}</option>
+                  ))}
                 </select>
-                <input {...register("receiverAddress", { required: true })} placeholder="Address" className="input input-bordered" />
-                <input {...register("deliveryInstruction", { required: true })} placeholder="Delivery Instruction" className="input input-bordered" />
+                <input
+                  {...register("receiverAddress", { required: true })}
+                  placeholder="Address"
+                  className="input input-bordered"
+                />
+                <input
+                  {...register("deliveryInstruction", { required: true })}
+                  placeholder="Delivery Instruction"
+                  className="input input-bordered"
+                />
               </div>
             </div>
           </div>
