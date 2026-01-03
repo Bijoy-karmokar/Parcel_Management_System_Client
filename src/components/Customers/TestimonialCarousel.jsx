@@ -5,7 +5,6 @@ import gari from "../../assets/customer-top.png"
 const TestimonialCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Testimonial data for parcel delivery system
   const testimonials = [
     {
       id: 1,
