@@ -9,6 +9,9 @@ const Navbar = () => {
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/"}>Home</NavLink></li>
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/sendParcel"}>Send Parcel</NavLink></li>
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/about"}>About us</NavLink></li>
+        {
+          user &&  <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/dashboard"}>DashBoard</NavLink></li>
+        }
   </>
   return (
     <div className="navbar bg-base-100 shadow-sm w-11/12 mb-8 mx-auto">
