@@ -7,6 +7,7 @@ const Navbar = () => {
   const {user} = useAuth();
   const links=<>
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/"}>Home</NavLink></li>
+        <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/sendParcel"}>Send Parcel</NavLink></li>
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/about"}>About us</NavLink></li>
   </>
   return (

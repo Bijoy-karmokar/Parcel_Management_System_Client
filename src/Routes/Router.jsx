@@ -4,6 +4,8 @@ import Home from "../pages/Home/Home";
 import AuthLayouts from "../layouts/AuthLayouts";
 import Login from "../pages/Authentication/LogIn/Login";
 import Register from "../pages/Authentication/Register/Register";
+import PrivateRoute from './../Router/PrivateRoute';
+import SendParcel from "../pages/sendParcel/SendParcel";
 
 const router = createBrowserRouter([
     {
@@ -13,6 +15,14 @@ const router = createBrowserRouter([
             {
                 index:true,
                 Component:Home
+            },
+            {
+                path:"/sendParcel",
+                element:<PrivateRoute><SendParcel></SendParcel></PrivateRoute>,
+                loader: async ()=>{
+                    const res = (await fetch('/warehouses.json'));
+                    return res.json();
+                }
             }
         ]
     },
