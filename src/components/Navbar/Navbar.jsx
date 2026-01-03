@@ -1,8 +1,10 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import ProfastLogo from "../ProfastLogo/ProfastLogo";
+import useAuth from './../../hooks/useAuth';
 
 const Navbar = () => {
+  const {user} = useAuth();
   const links=<>
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/"}>Home</NavLink></li>
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/about"}>About us</NavLink></li>
@@ -47,7 +49,7 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+       <Link to="/login" className="btn btn-primary text-black">Login</Link>
       </div>
     </div>
   );
