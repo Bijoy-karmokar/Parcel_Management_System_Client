@@ -1,6 +1,11 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router";
 import ProfastLogo from "../components/ProfastLogo/ProfastLogo";
+import { AiOutlineHome } from "react-icons/ai"; 
+import { FaBoxOpen } from "react-icons/fa";
+import { RiHistoryLine } from "react-icons/ri"; 
+import { MdOutlineTrackChanges } from "react-icons/md"; 
+import { RiUserSettingsLine } from "react-icons/ri"; 
 
 const DashboardLayouts = () => {
   return (
@@ -56,11 +61,50 @@ const DashboardLayouts = () => {
           {/* Sidebar content here */}
           <ProfastLogo></ProfastLogo>
           <li>
-            <a>Home</a>
-          </li>
-          <li>
-            <NavLink to="/dashboard/myParcels">My Parcels</NavLink>
-          </li>
+        <NavLink
+          to="/dashboard"
+          className="flex items-center gap-2 hover:text-blue-500"
+        >
+          <AiOutlineHome size={20} />
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/myParcels"
+          className="flex items-center gap-2 hover:text-blue-500"
+        >
+          <FaBoxOpen size={20} />
+          My Parcels
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/paymentHistory"
+          className="flex items-center gap-2 hover:text-blue-500"
+        >
+          <RiHistoryLine size={20} />
+          Payment History
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/track"
+          className="flex items-center gap-2 hover:text-blue-500"
+        >
+          <MdOutlineTrackChanges size={20} />
+          Track a Package
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/profile"
+          className="flex items-center gap-2 hover:text-blue-500"
+        >
+          <RiUserSettingsLine size={20} />
+          Update Profile
+        </NavLink>
+      </li>
         </ul>
       </div>
     </div>
