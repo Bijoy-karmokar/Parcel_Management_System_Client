@@ -3,11 +3,13 @@ import useAuth from '../../../hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
 
 const MyParcels = () => {
     const {user} = useAuth();
     const axiosSecure = useAxiosSecure();
-    const {data:parcels=[],isLoading,refetch} = useQuery({
+    const navigate = useNavigate();
+    const {data:parcels=[],refetch} = useQuery({
         queryKey:["my-parcels",user.email],
         queryFn:async()=>{
             const res = await axiosSecure.get(`/parcels?email=${user.email}`);
@@ -38,22 +40,23 @@ const MyParcels = () => {
 
   /* ---------- PAY ---------- */
   const handlePay = (parcel) => {
-    Swal.fire({
-      title: "Confirm Payment",
-      text: `Pay ৳${parcel.cost} for "${parcel.title}"?`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Pay Now",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure
-          .patch(`/parcels/pay/${parcel._id}`)
-          .then(() => {
-            Swal.fire("Success", "Payment completed", "success");
+    navigate(`/dashboard/payment/${parcel._id}`);
+    // Swal.fire({
+    //   title: "Confirm Payment",
+    //   text: `Pay ৳${parcel.cost} for "${parcel.title}"?`,
+    //   icon: "question",
+    //   showCancelButton: true,
+    //   confirmButtonText: "Pay Now",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     axiosSecure
+    //       .patch(`/parcels/pay/${parcel._id}`)
+    //       .then(() => {
+    //         Swal.fire("Success", "Payment completed", "success");
           
-          });
-      }
-    });
+    //       });
+    //   }
+    // });
   };
 
   /* ---------- DELETE ---------- */

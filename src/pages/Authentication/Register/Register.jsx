@@ -1,11 +1,15 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import useAuth from '../../../hooks/useAuth';
 
 const Register = () => {
     const {createUser} = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const from = location.state?.from || "/";
+
     // console.log(createUser);
     
        const {register,handleSubmit,formState:{errors}} = useForm();
@@ -15,7 +19,10 @@ const Register = () => {
             
           
               createUser(data.email,data.password)
-              .then(result=>console.log(result.user)
+              .then(result=>{
+                console.log(result.user)
+                navigate(from);
+              }
               ).catch(error=>
                 console.log(error.message)
                 

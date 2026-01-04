@@ -4,7 +4,7 @@ import ProfastLogo from "../ProfastLogo/ProfastLogo";
 import useAuth from './../../hooks/useAuth';
 
 const Navbar = () => {
-  const {user} = useAuth();
+  const {user,logOut} = useAuth();
   const links=<>
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/"}>Home</NavLink></li>
         <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/sendParcel"}>Send Parcel</NavLink></li>
@@ -13,6 +13,15 @@ const Navbar = () => {
           user &&  <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/dashboard"}>DashBoard</NavLink></li>
         }
   </>
+  const handleLogOut = ()=>{
+    logOut().then(res=>{
+      console.log(res.data);
+      
+    }).catch(error=>{
+      console.log(error);
+      
+    })
+  }
   return (
     <div className="navbar bg-base-100 shadow-sm w-11/12 mb-8 mx-auto">
       <div className="navbar-start">
@@ -53,7 +62,15 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-       <Link to="/login" className="btn btn-primary text-black">Login</Link>
+       {
+        user ? <>
+        <button onClick={handleLogOut} className="btn btn-primary text-black">Log Out</button>
+        </> :
+       <>
+        <Link to="/login" className="btn btn-primary text-black">Login</Link>
+        <Link to="/register" className="btn btn-primary text-black ml-2">Register</Link>
+       </>
+       }
       </div>
     </div>
   );
