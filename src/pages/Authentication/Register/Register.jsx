@@ -4,9 +4,10 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import useAuth from '../../../hooks/useAuth';
 import axios from 'axios';
+import useAxios from '../../../hooks/useAxios';
 
 const Register = () => {
-
+    const axiosInstance = useAxios();
     const {createUser,updateUserProfile} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
@@ -18,13 +19,20 @@ const Register = () => {
     
        const {register,handleSubmit,formState:{errors}} = useForm();
         const onSubmit = data =>{
-          console.log(data.email,data.password);
-
-            
-          
+          // console.log(data.email,data.password);
               createUser(data.email,data.password)
-              .then(result=>{
+              .then(async(result)=>{
                 console.log(result.user)
+                const userInfo={
+                  email:data.email,
+                  role:"user",
+                  created_at:new Date().toISOString(),
+                  last_log_at:new Date().toISOString()
+                }
+
+                const userRes = await axiosInstance.post('/users',userInfo);
+                console.log(userRes.data);
+                
                 const userProfile ={
                   displayName:data.name,
                   photoURL :profilePic
