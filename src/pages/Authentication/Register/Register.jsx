@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import useAuth from '../../../hooks/useAuth';
+import axios from 'axios';
 
 const Register = () => {
-    const {createUser} = useAuth();
+
+    const {createUser,updateUserProfile} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from || "/";
+
+    const [profilePic,setProfilePic] = useState("");
 
     // console.log(createUser);
     
@@ -21,6 +25,20 @@ const Register = () => {
               createUser(data.email,data.password)
               .then(result=>{
                 console.log(result.user)
+                const userProfile ={
+                  displayName:data.name,
+                  photoURL :profilePic
+                }
+
+                updateUserProfile(userProfile)
+                .then(()=>{
+                  console.log("ProUrl updated");
+                  
+                })
+                .catch(error=>{
+                  console.log(error);
+                  
+                })
                 navigate(from);
               }
               ).catch(error=>
@@ -28,6 +46,19 @@ const Register = () => {
                 
               )
             
+        }
+
+        const handleImgUpload =async(e)=>{
+          const image = e.target.files[0];
+           console.log(image);
+
+           const formData = new FormData();
+           formData.append("image",image);
+           
+           const uploadImage =`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_KEY }`
+          const res = await axios.post(uploadImage,formData);
+          setProfilePic(res.data.data.url);
+          
         }
     return (
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -45,10 +76,10 @@ const Register = () => {
             }
             {/* photoURL */}
           <label className="label">PhotoURL</label>
-          <input type="text" {...register("photoURL",{required:true})} className="input" placeholder="PhotoURL" />
-            {
+          <input type="file" onChange={handleImgUpload} className="input" placeholder="PhotoURL" />
+            {/* {
                 errors.photoURL?.type ==="required" && <p className='text-red-600'>PhotoURL is required</p>
-            }
+            } */}
             {/* email */}
           <label className="label">Email</label>
           <input type="email" {...register("email",{required:true})} className="input" placeholder="Email" />
