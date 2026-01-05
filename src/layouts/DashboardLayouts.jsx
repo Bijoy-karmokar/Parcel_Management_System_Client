@@ -1,11 +1,13 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router";
 import ProfastLogo from "../components/ProfastLogo/ProfastLogo";
-import { AiOutlineHome } from "react-icons/ai"; 
+import { AiOutlineHome } from "react-icons/ai";
 import { FaBoxOpen } from "react-icons/fa";
-import { RiHistoryLine } from "react-icons/ri"; 
-import { MdOutlineTrackChanges } from "react-icons/md"; 
-import { RiUserSettingsLine } from "react-icons/ri"; 
+import { RiHistoryLine } from "react-icons/ri";
+import { MdOutlineTrackChanges } from "react-icons/md";
+import { RiUserSettingsLine } from "react-icons/ri";
+import { FaMotorcycle } from "react-icons/fa";
+import { MdPendingActions } from "react-icons/md";
 
 const DashboardLayouts = () => {
   return (
@@ -35,7 +37,9 @@ const DashboardLayouts = () => {
               </svg>
             </label>
           </div>
-          <div className="mx-2 flex-1 px-2 text-xl font-bold lg:hidden">DashBoard</div>
+          <div className="mx-2 flex-1 px-2 text-xl font-bold lg:hidden">
+            DashBoard
+          </div>
           <div className="hidden flex-none lg:hidden">
             <ul className="menu menu-horizontal">
               {/* Navbar menu content here */}
@@ -61,50 +65,76 @@ const DashboardLayouts = () => {
           {/* Sidebar content here */}
           <ProfastLogo></ProfastLogo>
           <li>
-        <NavLink
-          to="/dashboard"
-          className="flex items-center gap-2 hover:text-blue-500"
-        >
-          <AiOutlineHome size={20} />
-          Home
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/dashboard/myParcels"
-          className="flex items-center gap-2 hover:text-blue-500"
-        >
-          <FaBoxOpen size={20} />
-          My Parcels
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/dashboard/paymentHistory"
-          className="flex items-center gap-2 hover:text-blue-500"
-        >
-          <RiHistoryLine size={20} />
-          Payment History
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/dashboard/track"
-          className="flex items-center gap-2 hover:text-blue-500"
-        >
-          <MdOutlineTrackChanges size={20} />
-          Track a Package
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/dashboard/profile"
-          className="flex items-center gap-2 hover:text-blue-500"
-        >
-          <RiUserSettingsLine size={20} />
-          Update Profile
-        </NavLink>
-      </li>
+            <NavLink
+              to="/dashboard"
+              className="flex items-center gap-2 hover:text-blue-500"
+            >
+              <AiOutlineHome size={20} />
+              Home
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/myParcels"
+              className="flex items-center gap-2 hover:text-blue-500"
+            >
+              <FaBoxOpen size={20} />
+              My Parcels
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/paymentHistory"
+              className="flex items-center gap-2 hover:text-blue-500"
+            >
+              <RiHistoryLine size={20} />
+              Payment History
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/track"
+              className="flex items-center gap-2 hover:text-blue-500"
+            >
+              <MdOutlineTrackChanges size={20} />
+              Track a Package
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/profile"
+              className="flex items-center gap-2 hover:text-blue-500"
+            >
+              <RiUserSettingsLine size={20} />
+              Update Profile
+            </NavLink>
+          </li>
+
+          {/* 🔹 NEW LINKS */}
+
+          <li>
+            <NavLink
+              to="/dashboard/activeRiders"
+              className="flex items-center gap-2 hover:text-blue-500"
+            >
+              <FaMotorcycle size={20} />
+              Active Riders
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/pendingRiders"
+              className="flex items-center gap-2 hover:text-blue-500"
+            >
+              <MdPendingActions size={20} />
+              Pending Riders
+            </NavLink>
+          </li>
         </ul>
       </div>
     </div>
