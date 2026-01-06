@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { FaBan, FaHome } from "react-icons/fa";
 
 const Forbidden = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white shadow-xl rounded-2xl p-8 max-w-md text-center">
+      <div className="bg-white shadow-xl rounded-2xl p-8 max-w-2xl text-center">
         <FaBan className="text-red-500 text-6xl mx-auto mb-4" />
 
         <h1 className="text-3xl font-bold text-gray-800 mb-2">

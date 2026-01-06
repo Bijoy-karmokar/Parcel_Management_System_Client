@@ -11,7 +11,7 @@ import { MdPendingActions } from "react-icons/md";
 import useUserRole from "../hooks/useUserRole";
 
 const DashboardLayouts = () => {
-  const {role,roleLoading} =useUserRole();
+  const { role, roleLoading } = useUserRole();
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -116,41 +116,49 @@ const DashboardLayouts = () => {
             </NavLink>
           </li>
 
-         {
-          !roleLoading && role ==="admin" &&
-          <>
-           <li>
-            <NavLink
-              to="/dashboard/activeRiders"
-              className="flex items-center gap-2 hover:text-blue-500"
-            >
-              <FaMotorcycle size={20} />
-              Active Riders
-            </NavLink>
-          </li>
+          {!roleLoading && role === "admin" && (
+            <>
+              <li>
+                <NavLink
+                  to="/dashboard/assignRider"
+                  className="flex items-center gap-2 hover:text-blue-500"
+                >
+                  <FaMotorcycle className="text-lg" />
+                  <span>Assign Rider</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/activeRiders"
+                  className="flex items-center gap-2 hover:text-blue-500"
+                >
+                  <FaMotorcycle size={20} />
+                  Active Riders
+                </NavLink>
+              </li>
 
-          <li>
-            <NavLink
-              to="/dashboard/pendingRiders"
-              className="flex items-center gap-2 hover:text-blue-500"
-            >
-              <MdPendingActions size={20} />
-              Pending Riders
-            </NavLink>
-          </li>
-           <li>
-        <NavLink
-          to="/dashboard/makeAdmin"
-          className={({ isActive }) =>
-            isActive ? "font-bold text-blue-600" : ""
-          }
-        >
-         <FaUserCog size={20}></FaUserCog>
-          Make Admin
-        </NavLink>
-      </li>
-          </>
-         }
+              <li>
+                <NavLink
+                  to="/dashboard/pendingRiders"
+                  className="flex items-center gap-2 hover:text-blue-500"
+                >
+                  <MdPendingActions size={20} />
+                  Pending Riders
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/makeAdmin"
+                  className={({ isActive }) =>
+                    isActive ? "font-bold text-blue-600" : ""
+                  }
+                >
+                  <FaUserCog size={20}></FaUserCog>
+                  Make Admin
+                </NavLink>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>
