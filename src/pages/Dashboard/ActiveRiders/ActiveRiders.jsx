@@ -1,85 +1,73 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ActiveRiders = () => {
   const axiosSecure = useAxiosSecure();
-  const queryClient = useQueryClient();
+  const [search, setSearch] = useState("");
 
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Fetch active riders
-  const { data: riders = [], isLoading } = useQuery({
+  // ✅ Fetch active riders
+  const { data: riders = [], refetch, isLoading } = useQuery({
     queryKey: ["activeRiders"],
     queryFn: async () => {
       const res = await axiosSecure.get("/riders/active");
       return res.data;
     },
-    refetchOnWindowFocus: false,
   });
 
-  // Deactivate rider
-  const handleDeactivate = async (rider) => {
+  // ✅ Search filter
+  const filteredRiders = riders.filter((rider) =>
+    [rider.name, rider.email, rider.phone]
+      .join(" ")
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
+  // ✅ Deactivate rider
+  const handleDeactivate = async (id) => {
+    const confirm = await Swal.fire({
+      title: "Deactivate Rider?",
+      text: "This rider will no longer receive deliveries",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Deactivate",
+    });
+
+    if (!confirm.isConfirmed) return;
+
     try {
-      if (!rider._id) throw new Error("Rider ID missing");
-
-      // Update status to "pending"
-      await axiosSecure.patch(`/riders/${rider._id}`, { status: "pending" });
-
-      Swal.fire({
-        icon: "success",
-        title: "Rider deactivated",
-        timer: 1200,
-        showConfirmButton: false,
+      await axiosSecure.patch(`/riders/${id}`, {
+        status: "deactivated",
       });
 
-      // Update local cache immediately to remove rider from UI
-     queryClient.setQueryData(["activeRiders"], (oldData = []) =>
-  oldData.filter((r) => r._id !== rider._id)
-);
-
-
-    } catch (err) {
-      console.error(err);
+      Swal.fire("Success", "Rider deactivated", "success");
+      refetch();
+    } catch (error) {
       Swal.fire("Error", "Failed to deactivate rider", "error");
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center mt-20">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
+    return <div className="text-center py-10">Loading...</div>;
   }
 
-  // Filter riders based on search term
-  const filteredRiders = riders.filter((rider) =>
-    [rider.name, rider.email, rider.phone]
-      .join(" ")
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
-
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4 text-center">Active Riders</h2>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Active Riders</h2>
 
-      {/* Search input */}
-      <div className="mb-4 text-center">
-        <input
-          type="text"
-          placeholder="Search by name, email or phone..."
-          className="input input-bordered w-full md:w-1/2"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
+      {/* 🔍 Search */}
+      <input
+        type="text"
+        placeholder="Search by name, email or phone"
+        className="input input-bordered w-full md:w-1/3 mb-4"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-      {/* Table */}
-      <div className="overflow-x-auto bg-base-100 shadow rounded-lg">
-        <table className="table table-zebra">
+      {/* 📊 Table */}
+      <div className="overflow-x-auto">
+        <table className="table table-zebra w-full">
           <thead>
             <tr>
               <th>#</th>
@@ -87,45 +75,46 @@ const ActiveRiders = () => {
               <th>Email</th>
               <th>Phone</th>
               <th>Region</th>
-              <th>District</th>
-              <th>Bike</th>
               <th>Status</th>
-              <th className="text-center">Actions</th>
+              <th>Action</th>
             </tr>
           </thead>
+
           <tbody>
-            {filteredRiders.map((rider, index) => (
-              <tr key={rider._id}>
-                <td>{index + 1}</td>
-                <td>{rider.name}</td>
-                <td>{rider.email}</td>
-                <td>{rider.phone}</td>
-                <td>{rider.region}</td>
-                <td>{rider.district}</td>
-                <td>
-                  {rider.bikeModel} ({rider.bikeYear})
-                </td>
-                <td>
-                  <span className="badge badge-success">{rider.status}</span>
-                </td>
-                <td className="text-center">
-                  <button
-                    className="btn btn-xs btn-warning"
-                    onClick={() => handleDeactivate(rider)}
-                  >
-                    Deactivate
-                  </button>
+            {filteredRiders.length === 0 ? (
+              <tr>
+                <td colSpan="7" className="text-center py-4">
+                  No active riders found
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredRiders.map((rider, index) => (
+                <tr key={rider._id}>
+                  <td>{index + 1}</td>
+                  <td>{rider.name}</td>
+                  <td>{rider.email}</td>
+                  <td>{rider.phone}</td>
+                  <td>
+                    {rider.region}, {rider.district}
+                  </td>
+                  <td>
+                    <span className="badge badge-success">
+                      Active
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleDeactivate(rider._id)}
+                      className="btn btn-xs btn-error"
+                    >
+                      Deactivate
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
-
-        {filteredRiders.length === 0 && (
-          <p className="text-center py-6 text-gray-500">
-            No active riders found
-          </p>
-        )}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, Outlet } from "react-router";
 import ProfastLogo from "../components/ProfastLogo/ProfastLogo";
 import { AiOutlineHome } from "react-icons/ai";
-import { FaBoxOpen } from "react-icons/fa";
+import { FaBoxOpen, FaUserCog } from "react-icons/fa";
 import { RiHistoryLine } from "react-icons/ri";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import { RiUserSettingsLine } from "react-icons/ri";
@@ -135,6 +135,17 @@ const DashboardLayouts = () => {
               Pending Riders
             </NavLink>
           </li>
+           <li>
+        <NavLink
+          to="/dashboard/makeAdmin"
+          className={({ isActive }) =>
+            isActive ? "font-bold text-blue-600" : ""
+          }
+        >
+         <FaUserCog size={20}></FaUserCog>
+          Make Admin
+        </NavLink>
+      </li>
         </ul>
       </div>
     </div>
