@@ -8,8 +8,10 @@ import { MdOutlineTrackChanges } from "react-icons/md";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { FaMotorcycle } from "react-icons/fa";
 import { MdPendingActions } from "react-icons/md";
+import useUserRole from "../hooks/useUserRole";
 
 const DashboardLayouts = () => {
+  const {role,roleLoading} =useUserRole();
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -114,9 +116,10 @@ const DashboardLayouts = () => {
             </NavLink>
           </li>
 
-          {/* 🔹 NEW LINKS */}
-
-          <li>
+         {
+          !roleLoading && role ==="admin" &&
+          <>
+           <li>
             <NavLink
               to="/dashboard/activeRiders"
               className="flex items-center gap-2 hover:text-blue-500"
@@ -146,6 +149,8 @@ const DashboardLayouts = () => {
           Make Admin
         </NavLink>
       </li>
+          </>
+         }
         </ul>
       </div>
     </div>
