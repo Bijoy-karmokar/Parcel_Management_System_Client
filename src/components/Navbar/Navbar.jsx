@@ -1,28 +1,102 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import ProfastLogo from "../ProfastLogo/ProfastLogo";
-import useAuth from './../../hooks/useAuth';
+import useAuth from "./../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const {user,logOut} = useAuth();
-  const links=<>
-        <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/"}>Home</NavLink></li>
-        <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/sendParcel"}>Send Parcel</NavLink></li>
-        <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/about"}>About us</NavLink></li>
-        <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/beARider"}>Be A Rider</NavLink></li>
-        {
-          user &&  <li><NavLink className={({isActive})=>isActive? "text-blue-600 underline underline-offset-2 font-bold" : "font-bold"} to={"/dashboard"}>DashBoard</NavLink></li>
+  const { user, logOut } = useAuth();
+  const links = (
+    <>
+      <li>
+        <NavLink
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 underline underline-offset-2 font-bold"
+              : "font-bold"
+          }
+          to={"/"}
+        >
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 underline underline-offset-2 font-bold"
+              : "font-bold"
+          }
+          to={"/sendParcel"}
+        >
+          Send Parcel
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 underline underline-offset-2 font-bold"
+              : "font-bold"
+          }
+          to={"/about"}
+        >
+          About us
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-600 underline underline-offset-2 font-bold"
+              : "font-bold"
+          }
+          to={"/beARider"}
+        >
+          Be A Rider
+        </NavLink>
+      </li>
+      {user && (
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-blue-600 underline underline-offset-2 font-bold"
+                : "font-bold"
+            }
+            to={"/dashboard"}
+          >
+            DashBoard
+          </NavLink>
+        </li>
+      )}
+    </>
+  );
+  const handleLogOut = () => {
+    logOut()
+      .then((res) => {
+        if (res.data) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "LogOut successfully.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
-  </>
-  const handleLogOut = ()=>{
-    logOut().then(res=>{
-      console.log(res.data);
-      
-    }).catch(error=>{
-      console.log(error);
-      
-    })
-  }
+      })
+      .catch((error) => {
+        if (error) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Something went wrong!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+  };
   return (
     <div className="navbar bg-base-100 shadow-sm w-11/12 mb-8 mx-auto">
       <div className="navbar-start">
@@ -48,30 +122,50 @@ const Navbar = () => {
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-         {
-          links
-         }
+            {links}
           </ul>
         </div>
-        <Link to={"/"}><ProfastLogo></ProfastLogo></Link>
+        <Link to={"/"}>
+          <ProfastLogo></ProfastLogo>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-         {
-          links
-         }
-        </ul>
+        <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-       {
-        user ? <>
-        <button onClick={handleLogOut} className="btn btn-primary text-black">Log Out</button>
-        </> :
-       <>
-        <Link to="/login" className="btn btn-primary text-black">Login</Link>
-        <Link to="/register" className="btn btn-primary text-black ml-2">Register</Link>
-       </>
-       }
+        {user ? (
+          <>
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div title={user.displayName} className="w-10 rounded-full">
+                  <img
+                    alt="Tailwind CSS Navbar component"
+                    src={user.photoURL || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+                  />
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={handleLogOut}
+              className="btn btn-primary text-black ml-2"
+            >
+              Log Out
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="btn btn-primary text-black">
+              Login
+            </Link>
+            <Link to="/register" className="btn btn-primary text-black ml-2">
+              Register
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

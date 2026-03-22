@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, Outlet } from "react-router";
 import ProfastLogo from "../components/ProfastLogo/ProfastLogo";
 import { AiOutlineHome } from "react-icons/ai";
-import { FaBoxOpen, FaUserCog } from "react-icons/fa";
+import { FaBoxOpen, FaClipboardList, FaUserCog } from "react-icons/fa";
 import { RiHistoryLine } from "react-icons/ri";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import { RiUserSettingsLine } from "react-icons/ri";
@@ -68,7 +68,7 @@ const DashboardLayouts = () => {
           <ProfastLogo></ProfastLogo>
           <li>
             <NavLink
-              to="/dashboard"
+              to="/"
               className="flex items-center gap-2 hover:text-blue-500"
             >
               <AiOutlineHome size={20} />
@@ -115,7 +115,26 @@ const DashboardLayouts = () => {
               Update Profile
             </NavLink>
           </li>
-
+          {/* riders links */}
+          {
+            !roleLoading && role ==="rider" &&
+            <>
+            <li>
+          <NavLink
+            to="/dashboard/pendingDelivery"
+            className={({ isActive }) =>
+              `flex items-center gap-2 hover:text-blue-500 ${
+                isActive ? "text-blue-600 font-bold" : ""
+              }`
+            }
+          >
+            <FaClipboardList className="text-lg" />
+            <span>Pending Deliveries</span>
+          </NavLink>
+        </li>
+            </>
+          }
+          {/* admin links */}
           {!roleLoading && role === "admin" && (
             <>
               <li>
